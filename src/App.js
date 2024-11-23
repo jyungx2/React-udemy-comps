@@ -15,9 +15,12 @@ function App() {
   ];
 
   return (
-    // Community Convention with Prop names
+    // ✨ Community Convention with Prop names
     // selection -> value / onSelect -> onChange
-    <Dropdown options={options} value={selection} onChange={handleSelect} />
+    <div className="flex">
+      <Dropdown options={options} value={selection} onChange={handleSelect} />
+      <Dropdown options={options} value={selection} onChange={handleSelect} />
+    </div>
   );
 }
 
