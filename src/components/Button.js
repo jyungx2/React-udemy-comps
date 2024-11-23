@@ -1,4 +1,4 @@
-import className from "classnames";
+import classNames from "classnames";
 import { twMerge } from "tailwind-merge";
 
 // 1. To include dash in the string, you have to wrap string with ""(quotes)
@@ -24,7 +24,7 @@ function Button({
   console.log(rest);
   const classes = twMerge(
     // rest 오브젝트 중에 className 속성을 가진 밸류를 뽑아내어 나머지 tailwind css속성과 함께 거대한 스트링으로 머지한다!!
-    className(rest.className, "flex items-center px-3 py-1.5 border", {
+    classNames(rest.className, "flex items-center px-3 py-1.5 border", {
       "border-blue-500 bg-blue-500 text-white": primary,
       "border-gray-900 bg-gray-900 text-white": secondary,
       "border-green-500 bg-green-500 text-white": success,
