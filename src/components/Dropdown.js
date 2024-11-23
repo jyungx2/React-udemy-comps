@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { GoChevronDown } from "react-icons/go";
+import Panel from "./Panel";
 
 function Dropdown({ options, value, onChange }) {
   // isOpen 데이터는 다른 컴포넌트가 알아야할 필요 없음 -> Dropdown 컴포넌트에 정의
@@ -33,18 +34,14 @@ function Dropdown({ options, value, onChange }) {
 
   return (
     <div className="w-48 relative">
-      <div
-        className="flex justify-between items-center cursor-pointer border rounded p-3 shadow bg-white w-full"
+      <Panel
+        className="flex justify-between items-center cursor-pointer"
         onClick={handleClick}
       >
         {value?.label || "Select..."}
         <GoChevronDown className="text-lg" />
-      </div>
-      {isOpen && (
-        <div className="absolute top-full border rounded p-3 shadow bg-white w-full">
-          {renderedOptions}
-        </div>
-      )}
+      </Panel>
+      {isOpen && <Panel className="absolute top-full">{renderedOptions}</Panel>}
     </div>
   );
 }
