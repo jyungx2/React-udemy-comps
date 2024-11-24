@@ -4,7 +4,10 @@ const NavigationContext = createContext();
 
 const NavigationProvider = ({ children }) => {
   // 1️⃣ Initialize current path (immediately know what path the user is visiting)
+  // Window.location.pathname = 브라우저의 현재 URL 경로
+  // 렇게 설정하면, 앱이 처음 로드될 때 브라우저 URL과 상태(currentPath)가 처음부터 동기화
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  // navigate의 함수의 prop = to가 Pathname, pushState 메소드에 의해 to = window.location.pathname으로 동기화
 
   // 2️⃣ 사용자가 뒤로가기/앞으로가기 버튼을 눌렀을 때 호출
   // => 브라우저가 popstate 이벤트를 발생시키면, 이벤트 핸들러에서 setCurrentPath(window.location.pathname)을 호출하여 React 상태와 브라우저 URL을 동기화
@@ -43,7 +46,10 @@ const NavigationProvider = ({ children }) => {
   const navigate = (to) => {
     // ✅ 1. 브라우저의 history를 업데이트
     // 주소창의 Url을 업데이트 하기 위해 pushState를 호출 => 주소창을 바꿈으로써 유저 속임 (실제로 컴포넌트를 렌더하는 역할  X)
+    // 💥여기서는 궁극적으로 새로고침 안되게 하기 위해 window.location = ~~을 안썼다. => 유저가 앞/뒤로가기 버튼 눌렀을 때 popstate 이벤트가 호출되는데, 이때 호출되는 핸들러가 setCurrentPath(window.location.pathname)이라고 설정했을 때 새로고침 안 나타나는 이유가 바로 지금 이 코드처럼 Pushstate에 의해 추가된 url로 이동하는 것이기 때문, 그냥 Location라고 써주면 전체페이지가 새로고침돼서 SPA로선 ❌❌
+    // => pushState를 사용하는 이유는 유저가 주소창을 바꾸더라도 새로고침 없이 상태만 동기화되게 하기 위함.
     window.history.pushState({}, "", to);
+
     // ✅ 2. React 상태 업데이트
     // currentPath state를 업데이트하기 위해 setter 함수 호출 => 컴포넌트 리렌더
     setCurrentPath(to);

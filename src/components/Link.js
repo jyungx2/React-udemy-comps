@@ -5,13 +5,23 @@ function Link({ to, children }) {
   const { navigate } = useContext(NavigationContext);
 
   const handleClick = (event) => {
-    event.preventDefault();
+    // 💡 Handling Control and Command Keys
+    // console.log(event); // metaKey(mac) | ctrlKey(windows)
+    if (event.metaKey || event.ctrlKey) {
+      return;
+    }
 
+    event.preventDefault();
     // programmatically navigate to some other route/path.
     navigate(to);
   };
 
-  return <a onClick={handleClick}>{children}</a>;
+  // Prop 추가: href = {to}
+  return (
+    <a href={to} onClick={handleClick}>
+      {children}
+    </a>
+  );
 }
 
 export default Link;
