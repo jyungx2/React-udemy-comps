@@ -4,6 +4,8 @@ import Route from "./components/Route";
 import AccordionPage from "./pages/AccordionPage";
 import DropdownPage from "./pages/DropdownPage";
 import ButtonPage from "./pages/ButtonPage";
+import ModalPage from "./pages/ModalPage";
+// import Link from "./components/Link";
 
 function App() {
   return (
@@ -23,6 +25,10 @@ function App() {
         {/* Route - path prop값과 currentPath값을 context로부터 빼내와 이 둘이 같으면, children을 리턴하여 화면을 리렌더링 */}
         <Route path="/buttons">
           <ButtonPage />
+        </Route>
+
+        <Route path="/modal">
+          <ModalPage />
         </Route>
       </div>
     </div>
