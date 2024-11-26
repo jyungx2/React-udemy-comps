@@ -5,11 +5,12 @@ import AccordionPage from "./pages/AccordionPage";
 import DropdownPage from "./pages/DropdownPage";
 import ButtonPage from "./pages/ButtonPage";
 import ModalPage from "./pages/ModalPage";
+import TablePage from "./pages/TablePage";
 // import Link from "./components/Link";
 
 function App() {
   return (
-    <div className="container mx-auto grid grid-cols-6 gap-4 mt-4">
+    <div className="container mx-auto grid grid-cols-2 gap-4 mt-4">
       <Sidebar />
       <div className="col-spans-5">
         <Route path="/accordion">
@@ -29,6 +30,9 @@ function App() {
 
         <Route path="/modal">
           <ModalPage />
+        </Route>
+        <Route path="/table">
+          <TablePage />
         </Route>
       </div>
     </div>
