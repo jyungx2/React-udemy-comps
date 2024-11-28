@@ -1,11 +1,24 @@
+import { useState } from "react";
 import Table from "./Table";
 
 function SortableTable(props) {
   // config 배열을 수정하진 않고, 이벤트 핸들러만 추가할 것이다!
-  const { config } = props;
+  const { config, data } = props;
+
+  const [sortOrder, setSortOrder] = useState(null);
+  const [sortBy, setSortBy] = useState(null);
 
   const handleClick = (label) => {
-    console.log(label);
+    if (sortOrder === null) {
+      setSortOrder("asc");
+      setSortBy(label);
+    } else if (sortOrder === "asc") {
+      setSortOrder("desc");
+      setSortBy(label);
+    } else if (sortOrder === "desc") {
+      setSortOrder(null);
+      setSortBy(null);
+    }
   };
 
   const updatedConfig = config.map((column) => {
@@ -23,8 +36,33 @@ function SortableTable(props) {
     };
   });
 
+  // Only sort data if sortOrder && sortBy are not null
+  // Make a copy of the 'data' prop
+  // Find the correct sortValue function and use it for sorting.
+  let sortedData = data;
+  if (sortedData && sortBy) {
+    const { sortValue } = config.find((column) => column.label === sortBy);
+    // we're not modifying a prop.
+    sortedData = [...data].sort((a, b) => {
+      const valueA = sortValue(a);
+      const valueB = sortValue(b);
+
+      const reverseOrder = sortOrder === "asc" ? 1 : -1;
+      if (typeof valueA === "string") {
+        return valueA.localeCompare(valueB) * reverseOrder;
+      } else {
+        return (valueA - valueB) * reverseOrder;
+      }
+    });
+  }
+
   // ...props은 이미 config 프랍을 갖고 있긴 하지만, 더 나중에 쓰인 config 속성으로 덮어씌어질 것! => Overriding the previous one by adding in config.
-  return <Table {...props} config={updatedConfig} />;
+  return (
+    <div>
+      {sortOrder} - {sortBy}
+      <Table {...props} data={sortedData} config={updatedConfig} />
+    </div>
+  );
 }
 
 export default SortableTable;
