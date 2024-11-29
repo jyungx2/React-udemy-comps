@@ -1,29 +1,33 @@
 // import useCounter from "../hooks/use-counter";
 import Button from "../components/Button";
-import { useState } from "react";
+// import { useState } from "react";
 import { useReducer } from "react";
 import Panel from "../components/Panel";
 
-// useReducer
+// 📍 useReducer
 // 1. Alternative to useState
 // 2. Produces state
 // 3. Changing this state makes component rerender
 // 4. Useful when you have several different closely-related pieces of state.
 // 5. Useful when future state values depend on the current state
 
+// 294. Constant Action Types
+const INCREMENT_COUNT = "increment";
+const SET_VALUE_TO_ADD = "change_value_to_add";
+
 const reducer = (state, action) => {
   // state.count = state.count + 1; // ❌ Don't modify state object.
   // return { ...state, count: state.count + 1 }; // ✅ Make the brand new object and update it
 
   // 293. Understanding Action Objects
-  if (action.type === "increment") {
+  if (action.type === INCREMENT_COUNT) {
     return {
       ...state,
       count: state.count + 1,
     };
   }
 
-  if (action.type === "change-value-to-add") {
+  if (action.type === SET_VALUE_TO_ADD) {
     return {
       ...state,
       valueToAdd: action.payload,
@@ -32,7 +36,7 @@ const reducer = (state, action) => {
 
   // 🚨 No matter what, we always have to return a value from a reducer!!
   // 아무것도 리턴하지 않으면 state = undefined로 업데이트되어 아무것도 출력되지 않게 된다!! (에러 발생)
-  return state;
+  return state; // = return a current state!
 };
 
 function CounterPage({ initialCount }) {
@@ -56,7 +60,7 @@ function CounterPage({ initialCount }) {
 
     // 293. Understanding Action Objects
     dispatch({
-      type: "increment",
+      type: INCREMENT_COUNT,
     }); // 우리가 dispatch() 호출하는 순간, React is gonna go and find reducer Fn, and call it!
   };
 
@@ -78,7 +82,7 @@ function CounterPage({ initialCount }) {
 
     // 293. Understanding Action Objects
     dispatch({
-      type: "change-value-to-add",
+      type: SET_VALUE_TO_ADD,
       payload: value,
     });
   };
