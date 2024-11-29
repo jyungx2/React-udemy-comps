@@ -3,6 +3,7 @@ import Button from "../components/Button";
 // import { useState } from "react";
 import { useReducer } from "react";
 import Panel from "../components/Panel";
+import { produce } from "immer";
 
 // 📍 useReducer
 // 1. Alternative to useState
@@ -39,24 +40,41 @@ const reducer = (state, action) => {
   // 295. Refactoring to a Switch
   switch (action.type) {
     case INCREMENT_COUNT:
-      return {
-        ...state,
-        count: state.count + 1,
-      };
+      // return {
+      //   ...state,
+      //   count: state.count + 1,
+      // };
+
+      // ✨ If you're using Immer...
+      state.count = state.count + 1;
+      return;
 
     case SET_VALUE_TO_ADD:
-      return {
-        ...state,
-        valueToAdd: action.payload,
-      };
+      // return {
+      //   ...state,
+      //   valueToAdd: action.payload,
+      // };
+
+      // ✨ If you're using Immer...
+      state.valueToAdd = action.payload;
+      return;
 
     case DECREMENT_COUNT:
-      return {
-        ...state,
-        count: state.count - 1,
-      };
+      // return {
+      //   ...state,
+      //   count: state.count - 1,
+      // };
+
+      // ✨ If you're using Immer...
+      state.count = state.count - 1;
+      return;
 
     case ADD_VALUE_TO_COUNT:
+      // ✨ If you're using Immer...
+      // state.count = state.count + state.valueToAdd;
+      // state.valueToAdd = 0;
+      // return;
+
       return {
         // 297. A Few Design Considerations Around Reducers
         // 🍎 1. 굳이 ...state를 쓸 필요가 있을까? 어차피 count, valueToAdd 속성으로 덮혀씌어 질텐데..
@@ -66,7 +84,7 @@ const reducer = (state, action) => {
         // 1️⃣ 이런 전략은 여러 곳에서 같은 action을 dispatch해야 될 때도 dispatch()가 리턴하는 action 객체 안에 코드를 쓰지 않고, Reducer()에 딱 한 번만 쓰면 되기 때문에 더 적은 코드만으로 기능을 구현할 수 있다.
         // 2️⃣ 또한, reducer의 목적 또한 state가 바뀌는 방법을 매우 구체적으로 적는 것이기 때문에, action객체가 아닌, reducer함수에 state.count + state.valueToAdd을 적어주는 것이 나은 방법이다.
 
-        // count: action.payload,
+        // count: action.payload, ❌
         count: state.count + state.valueToAdd,
         valueToAdd: 0,
       };
@@ -102,7 +120,8 @@ function CounterPage({ initialCount }) {
   // 1️⃣ So, we need to write like state.count or state.valueToAdd.. not just count or valueToAdd.
   // 2️⃣ It's very useful when we're developing more complex App. In the aspect of debugging, we don't need to do like console.log(count, valueToAdd ....blah blah) we just have to type 'state' in console.log() to see what's going on our state ✨object!✨
 
-  const [state, dispatch] = useReducer(reducer, {
+  // ✨ If you're using Immer... Wrap the 'reducer' function with 'produce' function! (💥순수 Redux만으로 개발된 어플리케이션에서는 보통 immer 라이브러리는 잘 쓰지 않는다.)
+  const [state, dispatch] = useReducer(produce(reducer), {
     count: initialCount,
     valueToAdd: 0,
   });
