@@ -20,18 +20,47 @@ const reducer = (state, action) => {
   // return { ...state, count: state.count + 1 }; // ✅ Make the brand new object and update it
 
   // 293. Understanding Action Objects
-  if (action.type === INCREMENT_COUNT) {
-    return {
-      ...state,
-      count: state.count + 1,
-    };
-  }
+  // if (action.type === INCREMENT_COUNT) {
+  //   return {
+  //     ...state,
+  //     count: state.count + 1,
+  //   };
+  // }
 
-  if (action.type === SET_VALUE_TO_ADD) {
-    return {
-      ...state,
-      valueToAdd: action.payload,
-    };
+  // if (action.type === SET_VALUE_TO_ADD) {
+  //   return {
+  //     ...state,
+  //     valueToAdd: action.payload,
+  //   };
+  // }
+
+  // 295. Refactoring to a Switch
+  switch (action.type) {
+    case INCREMENT_COUNT:
+      return {
+        ...state,
+        count: state.count + 1,
+      };
+
+    case SET_VALUE_TO_ADD:
+      return {
+        ...state,
+        valueToAdd: action.payload,
+      };
+
+    default:
+      // ✅default case에 해당하는 리턴값이 반환된다는 것은 우리가 예상하지 못한
+      // 타입의 액션을 요청(dispatch) 했다는 것이다.
+
+      // 🗣️ 1. 어떤 사람들은 이렇게 Default case가 반환되는 경우, 프로그램상 문제가 있다고 판단하여 아래와 같이 에러를 던지는 코드를 작성하기도 한다.
+      // throw new Error("unexpected action type: " + action.type);
+
+      // 🗣️ 2. 하지만 또 어떤 사람들은, 예상치 못한 액션 타입을 dispatch했다고 해서 뭐 문제될 거 있어? 그냥 실수로 넘길 수도 있는거지. 라고 받아들이고, 굳이 이것 때문에 에러를 남기기 싫어한다. => 그냥 current state 리턴.
+      return state;
+
+    // 👉 둘 중 어떤 걸 선택할 지는 개인 취향!
+    // Do you want to throw an error like 'hey, I'm seeing an action type that I wasn't expecting'?
+    // Or do you want to ignore it and continue on?
   }
 
   // 🚨 No matter what, we always have to return a value from a reducer!!
