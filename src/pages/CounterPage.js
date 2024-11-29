@@ -11,7 +11,29 @@ import Panel from "../components/Panel";
 // 4. Useful when you have several different closely-related pieces of state.
 // 5. Useful when future state values depend on the current state
 
-const reducer = (state, action) => {};
+const reducer = (state, action) => {
+  // state.count = state.count + 1; // ❌ Don't modify state object.
+  // return { ...state, count: state.count + 1 }; // ✅ Make the brand new object and update it
+
+  // 293. Understanding Action Objects
+  if (action.type === "increment") {
+    return {
+      ...state,
+      count: state.count + 1,
+    };
+  }
+
+  if (action.type === "change-value-to-add") {
+    return {
+      ...state,
+      valueToAdd: action.payload,
+    };
+  }
+
+  // 🚨 No matter what, we always have to return a value from a reducer!!
+  // 아무것도 리턴하지 않으면 state = undefined로 업데이트되어 아무것도 출력되지 않게 된다!! (에러 발생)
+  return state;
+};
 
 function CounterPage({ initialCount }) {
   // const [count, setCount] = useState(initialCount);
@@ -31,6 +53,11 @@ function CounterPage({ initialCount }) {
 
   const increment = () => {
     // setCount(count + 1);
+
+    // 293. Understanding Action Objects
+    dispatch({
+      type: "increment",
+    }); // 우리가 dispatch() 호출하는 순간, React is gonna go and find reducer Fn, and call it!
   };
 
   const decrement = () => {
@@ -48,6 +75,12 @@ function CounterPage({ initialCount }) {
     // -> Add or(||) operator to input element (...valueToAdd의 default value = 0일 땐, 0대신 그냥 ""이 나오게끔)
 
     // setValueToAdd(value);
+
+    // 293. Understanding Action Objects
+    dispatch({
+      type: "change-value-to-add",
+      payload: value,
+    });
   };
 
   const handleSubmit = (e) => {
