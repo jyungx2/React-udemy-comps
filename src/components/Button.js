@@ -21,7 +21,7 @@ function Button({
   // 여기서 ...: rest parameter (나머지 인자를 하나의 객체로 묶는 역할을 합니다)
   ...rest
 }) {
-  console.log(rest);
+  // console.log(rest);
   const classes = twMerge(
     // rest 오브젝트 중에 className 속성을 가진 밸류를 뽑아내어 나머지 tailwind css속성과 함께 거대한 스트링으로 머지한다!!
     classNames(rest.className, "flex items-center px-3 py-1.5 border", {

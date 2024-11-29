@@ -14,6 +14,8 @@ import Panel from "../components/Panel";
 // 294. Constant Action Types
 const INCREMENT_COUNT = "increment";
 const SET_VALUE_TO_ADD = "change_value_to_add";
+const DECREMENT_COUNT = "decrement";
+const ADD_VALUE_TO_COUNT = "add_value_to_count";
 
 const reducer = (state, action) => {
   // state.count = state.count + 1; // ❌ Don't modify state object.
@@ -48,6 +50,19 @@ const reducer = (state, action) => {
         valueToAdd: action.payload,
       };
 
+    case DECREMENT_COUNT:
+      return {
+        ...state,
+        count: state.count - 1,
+      };
+
+    case ADD_VALUE_TO_COUNT:
+      return {
+        ...state,
+        count: state.count + state.valueToAdd,
+        valueToAdd: 0,
+      };
+
     default:
       // ✅default case에 해당하는 리턴값이 반환된다는 것은 우리가 예상하지 못한
       // 타입의 액션을 요청(dispatch) 했다는 것이다.
@@ -65,7 +80,7 @@ const reducer = (state, action) => {
 
   // 🚨 No matter what, we always have to return a value from a reducer!!
   // 아무것도 리턴하지 않으면 state = undefined로 업데이트되어 아무것도 출력되지 않게 된다!! (에러 발생)
-  return state; // = return a current state!
+  // return state; // = return a current state!
 };
 
 function CounterPage({ initialCount }) {
@@ -84,6 +99,8 @@ function CounterPage({ initialCount }) {
     valueToAdd: 0,
   });
 
+  console.log(state);
+
   const increment = () => {
     // setCount(count + 1);
 
@@ -95,6 +112,10 @@ function CounterPage({ initialCount }) {
 
   const decrement = () => {
     // setCount(count - 1);
+
+    dispatch({
+      type: DECREMENT_COUNT, // I'm going to dispatch an action object with a type of 'DECREMENT_COUNT' which we defined already in order to prevent making typos.
+    });
   };
 
   const handleChange = (e) => {
@@ -121,6 +142,10 @@ function CounterPage({ initialCount }) {
 
     // setCount(count + valueToAdd);
     // setValueToAdd(0);
+
+    dispatch({
+      type: ADD_VALUE_TO_COUNT,
+    });
   };
 
   return (
