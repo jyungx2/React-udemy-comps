@@ -8,9 +8,9 @@ import { produce } from "immer";
 // 📍 useReducer
 // 1. Alternative to useState
 // 2. Produces state
-// 3. Changing this state makes component rerender
-// 4. Useful when you have several different closely-related pieces of state.
-// 5. Useful when future state values depend on the current state
+// 3. "Changing this state makes component rerender"
+// 4. Useful when you have several different "closely-related pieces of state.""
+// 5. Useful when future "state values depend on the current state"
 
 // 294. Constant Action Types
 const INCREMENT_COUNT = "increment";
@@ -115,12 +115,18 @@ function CounterPage({ initialCount }) {
 
   // 🕹️ useReducer
   // * Conventions of useReducer = Each piece of state defined as a separate variable.
-  // * Conventions of useReducer = All state for the whole component defined in ✨a single object✨ => state that we're gonna refer to get a value from is "an object" as well! (ex. {count: 10, valueToAdd: 0})
+  // * Conventions of useReducer = All state for the whole component defined in ✨a single object✨ => state that we're gonna refer to get a value from is "an object" as well! (ex. {count: 10, valueToAdd: 0}) => 초기 상태 값은 보통 객체 형태로 정의되며, 상태 트리의 기본 값을 지정합니다
 
   // 1️⃣ So, we need to write like state.count or state.valueToAdd.. not just count or valueToAdd.
   // 2️⃣ It's very useful when we're developing more complex App. In the aspect of debugging, we don't need to do like console.log(count, valueToAdd ....blah blah) we just have to type 'state' in console.log() to see what's going on our state ✨object!✨
 
   // ✨ If you're using Immer... Wrap the 'reducer' function with 'produce' function! (💥순수 Redux만으로 개발된 어플리케이션에서는 보통 immer 라이브러리는 잘 쓰지 않는다.)
+  // 👉 reducer 함수는 상태(state)를 업데이트하는 로직을 담고 있는 순수 함수
+  // 👉 dispatch 함수는 단순히 "무언가 해야 한다"는 신호를 보내는 역할!
+  // : 특정 action 객체를 reducer에 전달하여 해당 reducer 함수에 현재 상태와 action을 넘겨주어 상태를 업데이트한다.
+
+  // 👉 useReducer(reducer, initialState)의 두 번째 매개변수는 초기 상태 값
+  // : 초기 상태 값은 보통 객체 형태로 정의되며, 상태 트리의 기본 값을 지정
   const [state, dispatch] = useReducer(produce(reducer), {
     count: initialCount,
     valueToAdd: 0,
@@ -129,12 +135,12 @@ function CounterPage({ initialCount }) {
   console.log(state);
 
   const increment = () => {
-    // setCount(count + 1);
+    // setCount(count + 1); // setter function 쓰는 대신에 action객체를 해당 상태를 다루는 (해당 상태관리를 담당하는) reducing 함수에 dispatch하면, 특정 로직이 실행되어 state 변경 -> 화면 리렌더링
 
     // 293. Understanding Action Objects
     dispatch({
       type: INCREMENT_COUNT,
-    }); // dispatch()를 호출하면 React는 reducer 함수를 찾아서 호출한다!
+    }); // dispatch()를 호출하면 React는 해당 액션 타입에 맞는 reducer 함수를 찾아서 호출한다!
 
     // ref) dispatch()는 단 하나의 인자(action 객체)만 받을 수 있다.
     // ❗️ 만약 하나 이상의 인자를 전달하려 하면 무시된다.
@@ -163,9 +169,12 @@ function CounterPage({ initialCount }) {
     // setValueToAdd(value);
 
     // 293. Understanding Action Objects
+    // action obj : { type: ~~ , payload: ~~ } => "convention"
     dispatch({
       type: SET_VALUE_TO_ADD,
-      payload: value,
+      payload: value, // 🙇‍♀️
+      // 👉 payload는 액션 객체의 속성으로, 리듀서에서 특정 로직을 실행할 때 사용할 추가 데이터
+      // action.payload 이 값은 나중에 Toolkit을 사용하면 ✨action creator의 매개변수로 들어가는 인자값에 해당✨한다. action creator는 액션 객체를 자동으로 만들어주는데, 이때 payload값은 action creator의 매개변수에 해당하고, type값은 해당 리듀서(여러 리듀서 존재)의 name 속성 + '/' + 리듀서 이름으로 구성되어 내부적으로 만들어진다.
     });
   };
 
